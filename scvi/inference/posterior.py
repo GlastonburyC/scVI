@@ -1,4 +1,4 @@
-from __future__ import annotations
+#from __future__ import annotations
 
 import copy
 import inspect
@@ -186,14 +186,14 @@ class Posterior:
     def __iter__(self):
         return map(self.to_cuda, iter(self.data_loader))
 
-    def to_cuda(self, tensors: List[torch.Tensor]) -> List[torch.Tensor]:
+    def to_cuda(self, tensors: List[torch.Tensor]) -> List['torch.Tensor']:
         """Converts list of tensors to cuda.
 
         :param tensors: tensors to convert
         """
         return [t.cuda() if self.use_cuda else t for t in tensors]
 
-    def update(self, data_loader_kwargs: dict) -> Posterior:
+    def update(self, data_loader_kwargs: dict) -> 'Posterior':
         """Updates the dataloader
 
         :param data_loader_kwargs: dataloader updates.
@@ -206,7 +206,7 @@ class Posterior:
         )
         return posterior
 
-    def sequential(self, batch_size: Optional[int] = 128) -> Posterior:
+    def sequential(self, batch_size: Optional[int] = 128) -> 'Posterior':
         """Returns a copy of the object that iterate over the data sequentially.
 
         :param batch_size: New batch size.
@@ -218,7 +218,7 @@ class Posterior:
             }
         )
 
-    def corrupted(self) -> Posterior:
+    def corrupted(self) -> 'Posterior':
         """Corrupts gene counts.
 
         """
@@ -226,7 +226,7 @@ class Posterior:
             {"collate_fn": self.gene_dataset.collate_fn_builder(corrupted=True)}
         )
 
-    def uncorrupted(self) -> Posterior:
+    def uncorrupted(self) -> 'Posterior':
         """Uncorrupts gene counts.
 
         """
@@ -1182,7 +1182,7 @@ class Posterior:
         n_samples: int = 100,
         genes: Union[list, np.ndarray] = None,
         batch_size: int = 128,
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+    ) -> Tuple['torch.Tensor', 'torch.Tensor']:
         """Create observation samples from the Posterior Predictive distribution
 
         :param n_samples: Number of required samples for each cell
@@ -1669,7 +1669,7 @@ class Posterior:
 
 def load_posterior(
     dir_path: str, model: nn.Module, use_cuda: Optional[bool] = True
-) -> Posterior:
+) -> 'Posterior':
     """Function to use in order to retrieve a posterior that was saved using the `save_posterior` method
 
     Because of pytorch model loading usage, this function needs a scVI model object initialized with exact same parameters
